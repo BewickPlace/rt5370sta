@@ -53,11 +53,11 @@ HAS_LLTD=n
 HAS_APCLI=n
 
 # Support Wpa_Supplicant
-HAS_WPA_SUPPLICANT=n
+HAS_WPA_SUPPLICANT=y
 
 
 # Support Native WpaSupplicant for Network Maganger
-HAS_NATIVE_WPA_SUPPLICANT_SUPPORT=n
+HAS_NATIVE_WPA_SUPPLICANT_SUPPORT=y
 
 #Support Net interface block while Tx-Sw queue full
 HAS_BLOCK_NET_IF=n
@@ -96,7 +96,7 @@ HAS_IDS_SUPPORT=n
 HAS_SNMP_SUPPORT=n
 
 #Support features of 802.11n Draft3
-HAS_DOT11N_DRAFT3_SUPPORT=n
+HAS_DOT11N_DRAFT3_SUPPORT=y
 
 #Support features of Single SKU. 
 HAS_SINGLE_SKU_SUPPORT=n
@@ -220,7 +220,7 @@ endif
 # config for STA mode
 
 ifeq ($(RT28xx_MODE),STA)
-WFLAGS += -DCONFIG_STA_SUPPORT -DDBG
+WFLAGS += -DCONFIG_STA_SUPPORT 
 
 ifeq ($(HAS_XLINK),y)
 WFLAGS += -DXLINK_SUPPORT
