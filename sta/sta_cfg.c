@@ -6444,6 +6444,8 @@ RtmpIoctl_rt_ioctl_siwencodeext(
     if (pIoctlSec->flags == RT_CMD_STA_IOCTL_SECURITY_DISABLED)
 	{
         keyIdx = pIoctlSec->KeyIdx; /*(encoding->flags & IW_ENCODE_INDEX) - 1; */
+    	if((keyIdx < 0) || (keyIdx >= NR_WEP_KEYS))
+    		return NDIS_STATUS_FAILURE;
         /* set BSSID wcid entry of the Pair-wise Key table as no-security mode */
 	    AsicRemovePairwiseKeyEntry(pAd, BSSID_WCID);
         pAd->SharedKey[BSS0][keyIdx].KeyLen = 0;
