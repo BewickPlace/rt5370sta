@@ -1,0 +1,10 @@
+Module.symvers
+Makefile
+modules.order
+/tools/bin2h
+*.o
+*.o.cmd
+*.ko
+*.ko.cmd
+*.tmp_versions
+*.mod.c
