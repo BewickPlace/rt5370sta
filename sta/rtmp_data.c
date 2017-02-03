@@ -431,6 +431,7 @@ VOID STAHandleRxDataFrame(
 			}
 		}
 	}
+	pAd->RalinkCounters.OneSecRxOkCnt++;				// Increment Rx Packet Count, used for quality calculation
 
 	pRxBlk->pData = (UCHAR *) pHeader;
 
