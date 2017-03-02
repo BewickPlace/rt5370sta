@@ -38,7 +38,7 @@
 #define REC_BA_SESSION_IDLE_TIMEOUT	(1000)	/* ms*/
 
 #define REORDERING_PACKET_TIMEOUT		((100 * OS_HZ)/1000)	/* system ticks -- 100 ms*/
-#define MAX_REORDERING_PACKET_TIMEOUT	((3000 * OS_HZ)/1000)	/* system ticks -- 100 ms*/
+#define MAX_REORDERING_PACKET_TIMEOUT		((500 * OS_HZ)/1000)	/* system ticks -- 100 ms*/
 
 #define RESET_RCV_SEQ		(0xFFFF)
 
@@ -441,11 +441,7 @@ void ba_flush_reordering_timeout_mpdus(
     if ((pBAEntry == NULL) || (pBAEntry->list.qlen <= 0))
         return;
 
-/*	if ((RTMP_TIME_AFTER((unsigned long)Now32, (unsigned long)(pBAEntry->LastIndSeqAtTimer+REORDERING_PACKET_TIMEOUT)) &&*/
-/*		 (pBAEntry->list.qlen > ((pBAEntry->BAWinSize*7)/8))) ||*/
-/*		(RTMP_TIME_AFTER((unsigned long)Now32, (unsigned long)(pBAEntry->LastIndSeqAtTimer+(10*REORDERING_PACKET_TIMEOUT))) &&*/
-/*		 (pBAEntry->list.qlen > (pBAEntry->BAWinSize/8)))*/
-	if (RTMP_TIME_AFTER((unsigned long)Now32, (unsigned long)(pBAEntry->LastIndSeqAtTimer+(MAX_REORDERING_PACKET_TIMEOUT/6))) 
+	if (RTMP_TIME_AFTER((unsigned long)Now32, (unsigned long)(pBAEntry->LastIndSeqAtTimer+(MAX_REORDERING_PACKET_TIMEOUT)))
 		 &&(pBAEntry->list.qlen > 1)
 		)
 	{
@@ -463,7 +459,7 @@ void ba_flush_reordering_timeout_mpdus(
 /*		DBGPRINT(RT_DEBUG_OFF, ("timeout[%d] (%lx-%lx = %d > %d): %x, ", pBAEntry->list.qlen, Now32, (pBAEntry->LastIndSeqAtTimer), */
 /*			   (int)((long) Now32 - (long)(pBAEntry->LastIndSeqAtTimer)), REORDERING_PACKET_TIMEOUT,*/
 /*			   pBAEntry->LastIndSeq));*/
-    		
+
 		/* force LastIndSeq to shift to LastIndSeq+1*/
     		/* */
     		Sequence = (pBAEntry->LastIndSeq+1) & MAXSEQ;
