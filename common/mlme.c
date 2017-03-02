@@ -2265,8 +2265,19 @@ VOID STAMlmePeriodicExec(
 			(pAd->StaCfg.bImprovedScan == FALSE) &&
 			(((TxTotalCnt + pAd->RalinkCounters.OneSecRxOkCnt) < 600)))
 		{
-			RTMPSetAGCInitValue(pAd, BW_20);
-			DBGPRINT(RT_DEBUG_TRACE, ("MMCHK - No BEACON. restore R66 to the low bound(%d) \n", (0x2E + GET_LNA_GAIN(pAd))));
+			ULONG BPtoJiffies;
+			LONG timeDiff;
+
+			BPtoJiffies = (((pAd->CommonCfg.BeaconPeriod * 1024 / 1000) * OS_HZ) / 1000);
+			timeDiff = (pAd->Mlme.Now32 - pAd->StaCfg.LastBeaconRxTime) / BPtoJiffies;
+			if (((timeDiff * BPtoJiffies) % pAd->CommonCfg.BeaconPeriod) > 5) {	// Timeout has been delayed
+				pAd->StaCfg.LastBeaconRxTime += (timeDiff * BPtoJiffies);	// Simulate Beacon & adjust timer
+				DBGPRINT(RT_DEBUG_OFF, ("MMCHK - BEACON Delayed (%d): SIMULATED\n", (int)(timeDiff * BPtoJiffies)));
+			} else {
+
+				RTMPSetAGCInitValue(pAd, BW_20);
+				DBGPRINT(RT_DEBUG_TRACE, ("MMCHK - No BEACON. restore R66 to the low bound(%d) \n", (0x2E + GET_LNA_GAIN(pAd))));
+			}
 		}
 
 
