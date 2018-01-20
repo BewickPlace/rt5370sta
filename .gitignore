@@ -1,7 +1,7 @@
 Module.symvers
 Makefile
 modules.order
-/tools/bin2h
+tools/bin2h
 *.o
 *.o.cmd
 *.ko
