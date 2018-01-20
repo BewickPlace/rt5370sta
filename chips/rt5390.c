@@ -3450,7 +3450,7 @@ INT RT5390_ATETssiCalibration(
 		if (pAd->bFroceEEPROMBuffer)
 			NdisMoveMemory(&(pAd->EEPROMImage[EEPROM_TSSI_OVER_OFDM_54]), (PUCHAR)(&EEPData) ,2);
 		else
-			eFuseWrite(pAd, EEPROM_TSSI_OVER_OFDM_54, (PUCHAR)(&EEPData), 2);
+			eFuseWrite(pAd, EEPROM_TSSI_OVER_OFDM_54, &EEPData, 2);
 	}
 #endif /* RTMP_EFUSE_SUPPORT */
 	else
@@ -3807,7 +3807,7 @@ INT RT5392_ATEReadExternalTSSI(
 			if (pAd->bFroceEEPROMBuffer)
 				NdisMoveMemory(&(pAd->EEPROMImage[EEPROM_TSSI_STEP_OVER_2DOT4G]), (PUCHAR)(&EEPData) ,2);
 			else
-			    	eFuseWrite(pAd, EEPROM_TSSI_STEP_OVER_2DOT4G, (PUCHAR)(&EEPData), 2);
+			    	eFuseWrite(pAd, EEPROM_TSSI_STEP_OVER_2DOT4G, &EEPData, 2);
 		}
 		else
 #endif /* RTMP_EFUSE_SUPPORT */

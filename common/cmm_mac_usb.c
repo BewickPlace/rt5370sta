@@ -222,7 +222,7 @@ VOID	RTMPFreeTxRxRingMemory(
 		if (pRxContext)
 			RTMPFreeUsbBulkBufStruct(pAd, 
 										&pRxContext->pUrb, 
-										&pRxContext->TransferBuffer, 
+										(PUCHAR *) &pRxContext->TransferBuffer, 
 										MAX_RXBULK_SIZE, 
 										pRxContext->data_dma);
 	}
@@ -230,14 +230,14 @@ VOID	RTMPFreeTxRxRingMemory(
 	/* Free PsPoll frame resource*/
 	RTMPFreeUsbBulkBufStruct(pAd, 
 								&pPsPollContext->pUrb, 
-								&pPsPollContext->TransferBuffer, 
+								(PUCHAR *) &pPsPollContext->TransferBuffer, 
 								sizeof(TX_BUFFER), 
 								pPsPollContext->data_dma);
 
 	/* Free NULL frame resource*/
 	RTMPFreeUsbBulkBufStruct(pAd, 
 								&pNullContext->pUrb, 
-								&pNullContext->TransferBuffer, 
+								(PUCHAR *) &pNullContext->TransferBuffer, 
 								sizeof(TX_BUFFER), 
 								pNullContext->data_dma);
 
@@ -275,7 +275,7 @@ VOID	RTMPFreeTxRxRingMemory(
 		if (pHTTXContext)
 			RTMPFreeUsbBulkBufStruct(pAd, 
 										&pHTTXContext->pUrb, 
-										&pHTTXContext->TransferBuffer, 
+										(PUCHAR *) &pHTTXContext->TransferBuffer, 
 										sizeof(HTTX_BUFFER), 
 										pHTTXContext->data_dma);
 	}
@@ -504,7 +504,7 @@ err:
 			if (pMLMEContext)
 				RTMPFreeUsbBulkBufStruct(pAd, 
 											&pMLMEContext->pUrb, 
-											&pMLMEContext->TransferBuffer, 
+											(PUCHAR *) &pMLMEContext->TransferBuffer, 
 											sizeof(TX_BUFFER), 
 											pMLMEContext->data_dma);
 		}
@@ -562,7 +562,7 @@ NDIS_STATUS	RTMPAllocTxRxRingMemory(
 			/*Allocate URB and bulk buffer*/
 			Status = RTMPAllocUsbBulkBufStruct(pAd, 
 												&pHTTXContext->pUrb, 
-												&pHTTXContext->TransferBuffer, 
+												(PVOID *)&pHTTXContext->TransferBuffer, 
 												sizeof(HTTX_BUFFER), 
 												&pHTTXContext->data_dma,
 												"HTTxContext");
@@ -592,7 +592,7 @@ NDIS_STATUS	RTMPAllocTxRxRingMemory(
 		/*Allocate URB*/
 		Status = RTMPAllocUsbBulkBufStruct(pAd, 
 											&pNullContext->pUrb, 
-											&pNullContext->TransferBuffer, 
+											(PVOID *)&pNullContext->TransferBuffer, 
 											sizeof(TX_BUFFER), 
 											&pNullContext->data_dma,
 											"TxNullContext");
@@ -606,7 +606,7 @@ NDIS_STATUS	RTMPAllocTxRxRingMemory(
 		/*Allocate URB*/
 		Status = RTMPAllocUsbBulkBufStruct(pAd, 
 											&pPsPollContext->pUrb, 
-											&pPsPollContext->TransferBuffer, 
+											(PVOID *)&pPsPollContext->TransferBuffer, 
 											sizeof(TX_BUFFER), 
 											&pPsPollContext->data_dma,
 											"TxPsPollContext");
@@ -624,7 +624,7 @@ NDIS_STATUS	RTMPAllocTxRxRingMemory(
 			/*Allocate URB*/
 			Status = RTMPAllocUsbBulkBufStruct(pAd, 
 												&pRxContext->pUrb, 
-												&pRxContext->TransferBuffer, 
+												(PVOID *)&pRxContext->TransferBuffer, 
 												MAX_RXBULK_SIZE, 
 												&pRxContext->data_dma, 
 												"RxContext");
@@ -845,7 +845,7 @@ NDIS_STATUS	NICInitTransmit(
 			/*Allocate URB*/
 			Status = RTMPAllocUsbBulkBufStruct(pAd, 
 												&pHTTXContext->pUrb, 
-												&pHTTXContext->TransferBuffer, 
+												(PVOID *)&pHTTXContext->TransferBuffer, 
 												sizeof(HTTX_BUFFER), 
 												&pHTTXContext->data_dma, 
 												"HTTxContext");
@@ -928,7 +928,7 @@ NDIS_STATUS	NICInitTransmit(
 		NdisZeroMemory(pNullContext, sizeof(TX_CONTEXT));
 		Status = RTMPAllocUsbBulkBufStruct(pAd,
 											&pNullContext->pUrb,
-											&pNullContext->TransferBuffer,
+											(PVOID *)&pNullContext->TransferBuffer,
 											sizeof(TX_BUFFER),
 											&pNullContext->data_dma,
 											"TxNullContext");
@@ -945,7 +945,7 @@ NDIS_STATUS	NICInitTransmit(
 		
 		Status = RTMPAllocUsbBulkBufStruct(pAd,
 											&pPsPollContext->pUrb,
-											&pPsPollContext->TransferBuffer,
+											(PVOID *)&pPsPollContext->TransferBuffer,
 											sizeof(TX_BUFFER),
 											&pPsPollContext->data_dma,
 											"TxPsPollContext");
@@ -972,14 +972,14 @@ err:
 	/* Free PsPoll frame resource*/
 	RTMPFreeUsbBulkBufStruct(pAd, 
 								&pPsPollContext->pUrb, 
-								&pPsPollContext->TransferBuffer, 
+								(PUCHAR *)&pPsPollContext->TransferBuffer, 
 								sizeof(TX_BUFFER), 
 								pPsPollContext->data_dma);
 
 	/* Free NULL frame resource*/
 	RTMPFreeUsbBulkBufStruct(pAd, 
 								&pNullContext->pUrb, 
-								&pNullContext->TransferBuffer, 
+								(PUCHAR *)&pNullContext->TransferBuffer, 
 								sizeof(TX_BUFFER), 
 								pNullContext->data_dma);
 	
@@ -994,7 +994,7 @@ err:
 			{
 				RTMPFreeUsbBulkBufStruct(pAd, 
 											&pMLMEContext->pUrb, 
-											&pMLMEContext->TransferBuffer,
+											(PUCHAR *)&pMLMEContext->TransferBuffer,
 											sizeof(TX_BUFFER),
 											pMLMEContext->data_dma);
 			}
@@ -1012,7 +1012,7 @@ err:
 		{
 			RTMPFreeUsbBulkBufStruct(pAd, 
 										&pHTTxContext->pUrb, 
-										&pHTTxContext->TransferBuffer,
+										(PUCHAR *)&pHTTxContext->TransferBuffer,
 										sizeof(HTTX_BUFFER),
 										pHTTxContext->data_dma);
 		}
@@ -1139,7 +1139,7 @@ VOID	RTMPFreeTxRxRingMemory(
 		if (pRxContext)
 			RTMPFreeUsbBulkBufStruct(pAd,
 										&pRxContext->pUrb,
-										&pRxContext->TransferBuffer,
+										(PUCHAR *)&pRxContext->TransferBuffer,
 										MAX_RXBULK_SIZE,
 										pRxContext->data_dma);
 	}
@@ -1147,14 +1147,14 @@ VOID	RTMPFreeTxRxRingMemory(
 	/* Free PsPoll frame resource*/
 	RTMPFreeUsbBulkBufStruct(pAd,
 								&pPsPollContext->pUrb,
-								&pPsPollContext->TransferBuffer,
+								(PUCHAR *)&pPsPollContext->TransferBuffer,
 								sizeof(TX_BUFFER),
 								pPsPollContext->data_dma);
 
 	/* Free NULL frame resource*/
 	RTMPFreeUsbBulkBufStruct(pAd,
 								&pNullContext->pUrb,
-								&pNullContext->TransferBuffer,
+								(PUCHAR *)&pNullContext->TransferBuffer,
 								sizeof(TX_BUFFER),
 								pNullContext->data_dma);
 
@@ -1192,7 +1192,7 @@ VOID	RTMPFreeTxRxRingMemory(
 			if (pHTTXContext)
 			RTMPFreeUsbBulkBufStruct(pAd,
 										&pHTTXContext->pUrb,
-										&pHTTXContext->TransferBuffer,
+										(PUCHAR *)&pHTTXContext->TransferBuffer,
 										sizeof(HTTX_BUFFER),
 										pHTTXContext->data_dma);
 		}
