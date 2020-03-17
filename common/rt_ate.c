@@ -1041,7 +1041,7 @@ VOID DefaultATEAsicSwitchChannel(
 #endif /* defined(RT28xx) || defined(RT2880) || defined(RT2883) */
 #ifdef RTMP_RF_RW_SUPPORT
 	/* added to prevent RF register reading error */
-	UCHAR RFValue = 0, RFValue2 = 0;
+	UCHAR RFValue = 0;// RFValue2 = 0;
 #endif /* RTMP_RF_RW_SUPPORT */
 
 #ifdef DOT11N_SS3_SUPPORT
@@ -9480,6 +9480,7 @@ INT Set_ATE_TSSI_CALIBRATION_Proc(
 	IN	PSTRING			arg)
 {    
 	RTMP_CHIP_ATE_TSSI_CALIBRATION(pAd, arg);
+	return 0;
 }
 
 
@@ -9496,6 +9497,7 @@ INT Set_ATE_TSSI_CALIBRATION_EX_Proc(
 	UCHAR		CurrentChannel;
 	
 	RTMP_CHIP_ATE_TSSI_CALIBRATION_EXTEND(pAd, arg);
+	return 0;
 }
 #endif /* RTMP_INTERNAL_TX_ALC */
 

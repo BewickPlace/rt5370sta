@@ -438,8 +438,8 @@ void ba_flush_reordering_timeout_mpdus(
 {
 	USHORT Sequence;
 
-    if ((pBAEntry == NULL) || (pBAEntry->list.qlen <= 0))
-        return;
+	if ((pBAEntry == NULL) || (pBAEntry->list.qlen <= 0))
+		return;
 
 	if (RTMP_TIME_AFTER((unsigned long)Now32, (unsigned long)(pBAEntry->LastIndSeqAtTimer+(MAX_REORDERING_PACKET_TIMEOUT)))
 		 &&(pBAEntry->list.qlen > 1)
