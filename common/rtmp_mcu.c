@@ -380,7 +380,7 @@ NDIS_STATUS RtmpAsicLoadFirmware(
 	ULONG			FileLength;
 	/*ULONG			firm;*/
 	UINT32			Version = (pAd->MACVersion >> 16);
-	UINT32			MacReg1 = 0;
+	// UINT32			MacReg1 = 0;
 
 	pFirmwareImage = FirmwareImage;
 	FileLength = sizeof(FirmwareImage);
