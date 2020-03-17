@@ -9480,6 +9480,7 @@ INT Set_ATE_TSSI_CALIBRATION_Proc(
 	IN	PSTRING			arg)
 {    
 	RTMP_CHIP_ATE_TSSI_CALIBRATION(pAd, arg);
+	return 0;
 }
 
 
@@ -9496,6 +9497,7 @@ INT Set_ATE_TSSI_CALIBRATION_EX_Proc(
 	UCHAR		CurrentChannel;
 	
 	RTMP_CHIP_ATE_TSSI_CALIBRATION_EXTEND(pAd, arg);
+	return 0;
 }
 #endif /* RTMP_INTERNAL_TX_ALC */
 
