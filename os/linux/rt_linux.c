@@ -101,8 +101,14 @@ static inline VOID __RTMP_SetPeriodicTimer(
 	IN unsigned long timeout)
 {
 	timeout = ((timeout * OS_HZ) / 1000);
-	pTimer->expires = jiffies + timeout;
-	add_timer(pTimer);
+	pTimer->t.expires = jiffies + timeout;
+	add_timer(&pTimer->t);
+}
+
+static void legacy_timer_emu_func(struct timer_list *t)
+{
+	struct legacy_timer_emu *lt = from_timer(lt, t, t);
+	lt->function(lt->data);
 }
 
 /* convert NdisMInitializeTimer --> RTMP_OS_Init_Timer */
@@ -112,8 +118,8 @@ static inline VOID __RTMP_OS_Init_Timer(
 	IN TIMER_FUNCTION function,
 	IN PVOID data)
 {
-	if (!timer_pending(pTimer)) {
-		init_timer(pTimer);
+	if (!timer_pending(&pTimer->t)) {
+		timer_setup(&pTimer->t, legacy_timer_emu_func, 0); 
 		pTimer->data = (unsigned long)data;
 		pTimer->function = function;
 	}
@@ -123,12 +129,12 @@ static inline VOID __RTMP_OS_Add_Timer(
 	IN OS_NDIS_MINIPORT_TIMER * pTimer,
 	IN unsigned long timeout)
 {
-	if (timer_pending(pTimer))
+	if (timer_pending(&pTimer->t))
 		return;
 
 	timeout = ((timeout * OS_HZ) / 1000);
-	pTimer->expires = jiffies + timeout;
-	add_timer(pTimer);
+	pTimer->t.expires = jiffies + timeout;
+	add_timer(&pTimer->t);
 }
 
 static inline VOID __RTMP_OS_Mod_Timer(
@@ -136,15 +142,15 @@ static inline VOID __RTMP_OS_Mod_Timer(
 	IN unsigned long timeout)
 {
 	timeout = ((timeout * OS_HZ) / 1000);
-	mod_timer(pTimer, jiffies + timeout);
+	mod_timer(&pTimer->t, jiffies + timeout);
 }
 
 static inline VOID __RTMP_OS_Del_Timer(
 	IN OS_NDIS_MINIPORT_TIMER * pTimer,
 	OUT BOOLEAN *pCancelled)
 {
-	if (timer_pending(pTimer))
-		*pCancelled = del_timer_sync(pTimer);
+	if (timer_pending(&pTimer->t))
+		*pCancelled = del_timer_sync(&pTimer->t);
 	else
 		*pCancelled = TRUE;
 }
@@ -495,9 +501,9 @@ PNDIS_PACKET duplicate_pkt(
 		MEM_DBG_PKT_ALLOC_INC(skb);
 
 		skb_reserve(skb, 2);
-		NdisMoveMemory(skb->tail, pHeader802_3, HdrLen);
+		NdisMoveMemory(skb_tail_pointer(skb), pHeader802_3, HdrLen);
 		skb_put(skb, HdrLen);
-		NdisMoveMemory(skb->tail, pData, DataSize);
+		NdisMoveMemory(skb_tail_pointer(skb), pData, DataSize);
 		skb_put(skb, DataSize);
 		skb->dev = pNetDev;	/*get_netdev_from_bssid(pAd, FromWhichBSSID); */
 		pPacket = OSPKT_TO_RTPKT(skb);
@@ -649,7 +655,7 @@ PNDIS_PACKET ClonePacket(
 		pClonedPkt->dev = pRxPkt->dev;
 		pClonedPkt->data = pData;
 		pClonedPkt->len = DataSize;
-		pClonedPkt->tail = pClonedPkt->data + pClonedPkt->len;
+		skb_set_tail_pointer(pClonedPkt, DataSize);
 		ASSERT(DataSize < 1530);
 	}
 	return pClonedPkt;
@@ -695,7 +701,7 @@ void wlan_802_11_to_802_3_packet(
 	pOSPkt->dev = pNetDev;
 	pOSPkt->data = pData;
 	pOSPkt->len = DataSize;
-	pOSPkt->tail = pOSPkt->data + pOSPkt->len;
+	skb_set_tail_pointer(pOSPkt, DataSize);
 
 	/* */
 	/* copy 802.3 header */
